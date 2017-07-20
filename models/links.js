@@ -19,7 +19,14 @@ var linksSchema = new Schema({
   rating: {type: Number},
   url: {type: String, required:true},
   addedBy: {type: Schema.Types.ObjectId, ref: "User"},
-  linkType: {type: String}
+  linkType: {type: String},
+  whenWritten: {type:String, required:true},
+   title: {
+    type: String,
+    trim: true,
+    required: "Title is Required"
+  }
+
 
 
 
