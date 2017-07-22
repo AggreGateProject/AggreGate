@@ -43,17 +43,33 @@ app.use(express.static("public"));
 
 // Database configuration with mongoose
 //what url to put for mongoose connection? heroku url? certainly not localhost?
-mongoose.connect("mongodb://localhost/aggregateDB");
-var db = mongoose.connection;
+// mongoose.connect("mongodb://localhost/aggregateDB");
+// var db = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+// var db = mongoose.connection;
 
-// Show any mongoose errors
-db.on("error", function(error) {
-  console.log("Mongoose Error: ", error);
-});
+// // Show any mongoose errors
+// db.on("error", function(error) {
+//   console.log("Mongoose Error: ", error);
+// });
 
-// Once logged in to the db through mongoose, log a success message
-db.once("open", function() {
-  console.log("Mongoose connection successful.");
+// // Once logged in to the db through mongoose, log a success message
+// db.once("open", function() {
+//   console.log("Mongoose connection successful.");
+// });
+
+// If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
+var db = process.env.MONGODB_URI || "mongodb://localhost/aggregateDB";
+
+// Connect mongoose to our database
+mongoose.connect(db, function(error) {
+  // Log any errors connecting with mongoose
+  if (error) {
+    console.log(error);
+  }
+  // Or log a success message
+  else {
+    console.log("mongoose connection is successful");
+  }
 });
 
 
