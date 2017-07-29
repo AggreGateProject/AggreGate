@@ -3,73 +3,7 @@
 </head>
 <form name="parseUrl" id="articleForm" action="test.php" method="POST">
     <p>
-        <input name="" id="targetField" />
+        <input name="" id="targetField"  />
     </p>
 </form>
-<script>
-const getTitle = (url) => {
-    return fetch(`https://crossorigin.me/${url}`)
-        .then((response) => response.text())
-        .then((html) => {
-            const doc = new DOMParser().parseFromString(html, "text/html");
-            const title = doc.querySelectorAll('title')[0];
-            return title.innerText;
-        });
-};
-
-
-
-// This one keeps the order the same as the URL list.
-// Promise.all(
-//   urls.map((url) => getTitle(url))
-// ).then((titles) => {
-//   console.log(titles);
-// });
-
-
-anon = (y) => y = $('input[id="targetField"]').val();
-var Title = (url) => {
-    // anon = (y) => y = $('input[id="targetField"]').val();
-    url = anon();
-    return getTitle(url).then(
-        (title) => {
-            console.log(title)
-        })
-}
-$(document).ready(anon())
-// anon = (y) => y = $('input[id="targetField"]').val();
-$('input[id="targetField"]').on("dragover", function(event) {
-    // event.preventDefault();  
-
-
-    event.stopPropagation();
-    // $(this).addClass('dragging');
-
-});
-
-$('input[id="targetField"]').on("dragleave", function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    // $(this).removeClass('dragging');
-
-});
-
-
-$('input[id="targetField"]').on("drop", function(event) {
-
-    // event.preventDefault();  
-    event.stopPropagation();
-
-    $('input[id="targetField"]').one("mousemove", function(event) {
-        event.stopPropagation();
-        Title();
-    })
-
-
-});
-
-
-// window.addEventListener('input[id="targetField', function (e) {
-//  console.log("keyup event detected! coming from this element:", e.target);
-// }, false);
-</script>
+<script src="urlSubmit.js"></script>
