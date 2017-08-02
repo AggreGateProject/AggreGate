@@ -8,59 +8,50 @@ const getTitle = (url) => {
         });
 };
 
-$('input[id="targetField"]').attr("style", "width:" + $(window).width() )
+$('input').attr("style", "width:" + $('body').width() + ";" + "height:" + $('body').width() + "; border: none; color: transparent; background: transparent; z-layer: 2");
 
-$('input[id="targetField"]').attr("style", "height:" + $(window).height())
+$('input').attr("onkeydown", "return false")
 
-// This one kehttp://kotaku.com/the-12-best-games-on-the-3ds-5878903eps the order the same as the URL list.
-// Promise.all(
-//   urls.map((url) => getTitle(url))
-// ).then((titles) => {
-//   console.log(titles);
-// });
 
 
 anon = (y) => y = $('input[id="targetField"]').val();
-var Title = (url) => {
+var Title = (r) => {
     // anon = (y) => y = $('input[id="targetField"]').val();
-    url = anon();
-    return getTitle(url).then(
+    r = anon();
+    return getTitle(r).then(
         (title) => {
+            var title = title
             var x = title.substr(0, 3);
-            switch(x){
-               
+            switch (x) {
                 case "DNS":
-                    console.log(x); //modal pop should go here for manual entry
+                    alert("Could not grab article."); //modal pop should go here for manual entry
                     break;
                 default:
-                    console.log(title); //shoots ajax call to be sent to article section
+                    $.post("/submitLink", { title: title, url: url, linkType: linkType, rating: rating, boardID: boardID }, function(data) {
+                        if (data === 'done') {
+                            window.location.href = "/eventPage/" + boardID;
+                        } else if (data.level === "warning") {
+                            // alert(JSON.stringify(data));
+                            alert(data.msg);
+                        }
+                    }); //shoots ajax call to be sent to article section
             }
         })
 }
 
 // anon = (y) => y = $('input[id="targetField"]').val();
 $('input[id="targetField"]').on("dragover", function(event) {
-   
-
-
     event.stopPropagation();
- 
-
 });
 
 $('input[id="targetField"]').on("dragleave", function(event) {
     event.preventDefault();
     event.stopPropagation();
- 
-
 });
 
 
 $('input[id="targetField"]').on("drop", function(event) {
-
-
     event.stopPropagation();
-
     $('input[id="targetField"]').one("mousemove", function(event) {
         event.stopPropagation();
         var getLocation = function(href) {
@@ -71,29 +62,45 @@ $('input[id="targetField"]').on("drop", function(event) {
         url = anon();
         var l = getLocation(url);
         var w = l.hostname;
-        link = $('input[id="targetField"]').val();
-        
-        
-        switch(w) {
+        url = $('input[id="targetField"]').val();
+        var overallurl = window.location.href
+        var overallurlArray = overallurl.split("/");
+        var boardID = overallurlArray[overallurlArray.length - 1];
+        var linkType = w;
+
+        switch (w) {
             case "www.youtube.com":
-                console.log(link); //shoots link to video iframe
+                Title();
                 break;
             case "vid.me":
-                console.log(link); //shoots link to video iframe
+                Title();
+                $('input[id="targetField"]').val("") //shoots link to video iframe
                 break;
             case "soundcloud.com":
-                console.log(link); //shoots link to podcast iframe
+                $.post("/submitLink", { title: title, url: url, linkType: linkType, rating: rating, boardID: boardID }, function(data) {
+                    if (data === 'done') {
+                        window.location.href = "/eventPage/" + boardID;
+                    } else if (data.level === "warning") {
+                        // alert(JSON.stringify(data));
+                        alert(data.msg);
+                    }
+                });
+                $('input[id="targetField"]').val("") //shoots link to podcast iframe
                 break;
             case "twitter.com":
-                console.log(link); //shoots link to twitter component
+                $.post("/submitLink", { title: title, url: url, linkType: linkType, rating: rating, boardID: boardID }, function(data) {
+                    if (data === 'done') {
+                        window.location.href = "/eventPage/" + boardID;
+                    } else if (data.level === "warning") {
+                        // alert(JSON.stringify(data));
+                        alert(data.msg);
+                    }
+                });
+                $('input[id="targetField"]').val("") //shoots link to twitter component
                 break;
             default:
                 Title();
+                $('input[id="targetField"]').val("")
         };
-
-
-        // Title();
     })
-
-
 });
